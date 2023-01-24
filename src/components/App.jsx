@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
-// import Phonebook from './Phonebook/Phonebook';
-// import Contacts from './Contacts/Contacts';
 import scss from './Phonebook/phonebook.module.scss';
+import ContactsList from './ContactsList/ContactsList';
+import Phonebook from './Phonebook/Phonebook';
+import Filter from './Filter/Filter';
 
 class App extends Component {
   state = {
@@ -17,21 +18,14 @@ class App extends Component {
       { id: nanoid(), name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
-  handleChange = ({ target }) => {
-    const { name, value } = target;
-    this.setState({ [name]: value });
-  };
-
-  removeContact(id) {
+  removeContact = id => {
     this.setState(({ contacts }) => {
       const newContacts = contacts.filter(contact => contact.id !== id);
       return { contacts: newContacts };
     });
-  }
+  };
 
   isDublicate(name, number) {
     const dublicateName = name.toLowerCase();
@@ -44,21 +38,23 @@ class App extends Component {
     return Boolean(result);
   }
 
-  addContact = e => {
-    e.preventDefault();
-
-    const { name, number } = this.state;
+  addContact = ({ name, number }) => {
     if (this.isDublicate(name, number)) {
-      return alert(`${name} with number: ${number} is already ixist`);
+      return alert(`${name} with number: ${number} is already exist`);
     }
 
     this.setState(prevState => {
-      const { name, contacts, number } = prevState;
+      const { contacts } = prevState;
 
       const newContact = { id: nanoid(), name, number };
 
-      return { contacts: [newContact, ...contacts], name: '', number: '' };
+      return { contacts: [newContact, ...contacts] };
     });
+    return true;
+  };
+
+  handleFilter = ({ target }) => {
+    this.setState({ filter: target.value });
   };
 
   getFilteredContacts() {
@@ -70,74 +66,30 @@ class App extends Component {
     const result = contacts.filter(({ name, number }) => {
       return (
         name.toLowerCase().includes(normalizedFilter) ||
-        number.toLowerCase().includes(normalizedFilter)
+        number.includes(normalizedFilter)
       );
     });
     return result;
   }
 
   render() {
-    const { name, number } = this.state;
-    const { handleChange, addContact } = this;
+    const { addContact, removeContact, handleFilter } = this;
     const contacts = this.getFilteredContacts();
-
-    const contactsList = contacts.map(({ id, name, number }) => {
-      return (
-        <li key={id}>
-          {name}. Number : {number}
-          <button onClick={() => this.removeContact(id)} type="button">
-            Delete
-          </button>
-        </li>
-      );
-    });
+    const isContacts = Boolean(contacts.length);
 
     return (
-      <>
-        <div className={scss.wrapper}>
-          <h2>Phonebook</h2>
-          <form action="" onSubmit={addContact}>
-            <label>
-              Name
-              <input
-                onChange={handleChange}
-                type="text"
-                name="name"
-                value={name}
-                pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-                title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-                required
-              />
-            </label>
-            <label>
-              Number
-              <input
-                onChange={handleChange}
-                type="tel"
-                name="number"
-                value={number}
-                pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-                title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-                required
-              />
-            </label>
-            <button type="submit">Add contact</button>
-          </form>
-        </div>
-        <div className={scss.wrapper}>
-          <label>Filter contacts</label>
-          <input
-            name="filter"
-            onChange={handleChange}
-            placeholder="Filter contacts"
-          />
-          <div>
-            <ol>{contactsList}</ol>
-          </div>
-        </div>
-      </>
+      <div>
+        <h1>Phonebook</h1>
+        <Phonebook onSubmit={addContact} />
+        <h2>Contacts</h2>
+        <Filter handleChange={handleFilter} />
+
+        {isContacts && (
+          <ContactsList contacts={contacts} removeContact={removeContact} />
+        )}
+        {!isContacts && <p>No contacts in phonebook</p>}
+      </div>
     );
   }
 }
-
 export default App;
