@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import scss from 'components/ContactsItem/contacts-item.module.scss';
+import scss from './contacts-item.module.scss';
 
 const ContactsItem = ({ id, name, number, removeContact }) => {
   return (
