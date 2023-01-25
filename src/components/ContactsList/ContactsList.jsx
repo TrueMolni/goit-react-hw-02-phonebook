@@ -14,7 +14,7 @@ const ContactsList = ({ contacts, removeContact }) => {
       />
     );
   });
-  return <ol>{myContacts}</ol>;
+  return <ol className={scss.wrapper}>{myContacts}</ol>;
 };
 
 export default ContactsList;

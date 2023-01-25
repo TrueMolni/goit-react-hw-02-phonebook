@@ -28,11 +28,12 @@ class Phonebook extends Component {
     const { handleChange, handleSubmit } = this;
 
     return (
-      <div>
+      <div className={scss.wrapper}>
         <form onSubmit={handleSubmit}>
           <label>
             Name
             <input
+              className={scss.input}
               onChange={handleChange}
               type="text"
               name="name"
@@ -45,6 +46,7 @@ class Phonebook extends Component {
           <label>
             Number
             <input
+              className={scss.input}
               onChange={handleChange}
               type="tel"
               name="number"
@@ -54,7 +56,9 @@ class Phonebook extends Component {
               required
             />
           </label>
-          <button type="submit">Add contact</button>
+          <button className={scss.button} type="submit">
+            Add contact
+          </button>
         </form>
       </div>
     );

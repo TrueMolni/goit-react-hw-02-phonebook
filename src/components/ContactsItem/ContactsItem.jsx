@@ -3,9 +3,13 @@ import scss from './contacts-item.module.scss';
 
 const ContactsItem = ({ id, name, number, removeContact }) => {
   return (
-    <li>
+    <li className={scss.item}>
       {name}. Number : {number}
-      <button onClick={() => removeContact(id)} type="button">
+      <button
+        className={scss.button}
+        onClick={() => removeContact(id)}
+        type="button"
+      >
         Delete
       </button>
     </li>
