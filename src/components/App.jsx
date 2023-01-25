@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
-// import scss from './Phonebook/phonebook.module.scss';
 import ContactsList from './ContactsList/ContactsList';
 import Phonebook from './Phonebook/Phonebook';
 import Filter from './Filter/Filter';
