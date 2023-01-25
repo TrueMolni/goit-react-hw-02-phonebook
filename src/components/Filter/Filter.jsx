@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import scss from './filter.module.scss';
+// import scss from './filter.module.scss';
 
 const Filter = ({ handleChange }) => {
   return (
